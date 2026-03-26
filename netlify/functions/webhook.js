@@ -1,22 +1,25 @@
-exports.handler = async (event, context) => {
+exports.handler = async (event) => {
   try {
     const data = JSON.parse(event.body);
 
-    console.log("Data dari WA:", data);
+    const pesanMasuk = data.message || "Halo";
 
-    // contoh proses AI sederhana
-    const pesan = data.message || "";
-    const ringkasan = pesan.slice(0, 50);
-
-    // nanti bisa lu kirim ke database di sini
-    // await fetch("API_DB_LU", {...})
+    // kirim balik ke WA via Fonnte
+    await fetch("https://api.fonnte.com/send", {
+      method: "POST",
+      headers: {
+        "Authorization": "QNvea9j4ggvfQQDLXVdi",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        target: data.sender, // nomor pengirim
+        message: "Laporan diterima: " + pesanMasuk
+      })
+    });
 
     return {
       statusCode: 200,
-      body: JSON.stringify({
-        status: "success",
-        ringkasan: ringkasan
-      })
+      body: JSON.stringify({ status: "ok" })
     };
   } catch (err) {
     return {
