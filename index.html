@@ -1,39 +1,40 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Dashboard Laporan</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-</head>
-<body class="bg-gray-100 p-6">
+<?php
+// Ambil data dari Fonnte (POST JSON)
+$data = json_decode(file_get_contents("php://input"), true);
 
-  <h1 class="text-3xl font-bold mb-6">📊 Dashboard Laporan Warga</h1>
+// Ambil pesan & nomor pengirim
+$sender = $data['sender']; // nomor WA
+$message = strtolower(trim($data['message'])); // isi pesan
 
-  <div id="list" class="grid gap-4"></div>
+// Token Fonnte lu
+$token = "QNvea9j4ggvfQQDLXVdi";
 
-  <script>
-    async function loadData() {
-      // GANTI dengan API lu
-      const res = await fetch("https://your-api.com/laporan");
-      const data = await res.json();
+// Cek isi pesan
+if ($message == "halo") {
 
-      const container = document.getElementById("list");
-      container.innerHTML = "";
+    $reply = "halo";
 
-      data.forEach(item => {
-        container.innerHTML += `
-          <div class="bg-white p-4 rounded-xl shadow">
-            <h2 class="font-bold text-lg">${item.kategori}</h2>
-            <p class="text-sm text-gray-500">${item.lokasi}</p>
-            <p class="mt-2">${item.ringkasan}</p>
-            <p class="text-xs text-gray-400 mt-2">${item.tanggal}</p>
-          </div>
-        `;
-      });
-    }
+    // Kirim balasan ke Fonnte API
+    $curl = curl_init();
 
-    loadData();
-  </script>
+    curl_setopt_array($curl, array(
+        CURLOPT_URL => "https://api.fonnte.com/send",
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_POST => true,
+        CURLOPT_POSTFIELDS => array(
+            'target' => $sender,
+            'message' => $reply,
+        ),
+        CURLOPT_HTTPHEADER => array(
+            "Authorization: $token"
+        ),
+    ));
 
-</body>
-</html>
+    $response = curl_exec($curl);
+    curl_close($curl);
+}
+
+// Optional: biar gak timeout
+http_response_code(200);
+echo "OK";
+?>
