@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Laporan Warga</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+
+  <div class="bg-white p-6 rounded-2xl shadow-lg w-full max-w-md">
+    <h1 class="text-2xl font-bold mb-4 text-center">📢 Laporan Warga</h1>
+
+    <form id="laporanForm" class="space-y-4">
+      <input type="text" id="nama" placeholder="Nama"
+        class="w-full p-3 border rounded-lg" required>
+
+      <input type="text" id="lokasi" placeholder="Lokasi kejadian"
+        class="w-full p-3 border rounded-lg" required>
+
+      <textarea id="laporan" placeholder="Tulis laporan..."
+        class="w-full p-3 border rounded-lg" required></textarea>
+
+      <button type="submit"
+        class="w-full bg-blue-500 text-white p-3 rounded-lg hover:bg-blue-600">
+        Kirim Laporan
+      </button>
+    </form>
+
+    <p id="status" class="text-center mt-4 text-sm"></p>
+  </div>
+
+  <script>
+    const form = document.getElementById("laporanForm");
+    const status = document.getElementById("status");
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const data = {
+        nama: document.getElementById("nama").value,
+        lokasi: document.getElementById("lokasi").value,
+        laporan: document.getElementById("laporan").value
+      };
+
+      try {
+        // GANTI dengan endpoint backend lu nanti
+        await fetch("https://your-backend-api.com/laporan", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data)
+        });
+
+        status.innerText = "✅ Laporan berhasil dikirim!";
+        form.reset();
+      } catch (err) {
+        status.innerText = "❌ Gagal kirim laporan!";
+      }
+    });
+
+    // Simulasi laporan masuk (untuk testing)
+    app.post("/laporan", async (req, res) => {
+  const { nama, lokasi, laporan } = req.body;
+
+  // kirim ke WhatsApp via Fonte
+  await fetch("https://api.fonte.id/send", {
+    method: "POST",
+    headers: {
+      "Authorization": "TOKEN_LU",
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      target: "628xxxx",
+      message: `Laporan dari ${nama}\nLokasi: ${lokasi}\nIsi: ${laporan}`
+    })
+  });
+
+  res.json({ success: true });
+});
+  </script>
+
+</body>
+</html>
