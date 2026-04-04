@@ -1,40 +1,45 @@
-<?php
-// Ambil data dari Fonnte (POST JSON)
-$data = json_decode(file_get_contents("php://input"), true);
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>WargaSpeak - Layanan Pengaduan RT</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>WargaSpeak</h1>
+        <p><i>Sistem Laporan Warga RT 01 (Transparan & Cepat)</i></p>
 
-// Ambil pesan & nomor pengirim
-$sender = $data['sender']; // nomor WA
-$message = strtolower(trim($data['message'])); // isi pesan
+        <hr>
 
-// Token Fonnte lu
-$token = "QNvea9j4ggvfQQDLXVdi";
+        <div class="form-section">
+            <label><b>Nama Pelapor:</b></label><br>
+            <input type="text" id="namaPelapor" placeholder="Masukkan nama Anda"><br><br>
 
-// Cek isi pesan
-if ($message == "halo") {
+            <label><b>Isi Laporan:</b></label><br>
+            <textarea id="isiLaporan" rows="4" cols="50" placeholder="Apa masalahnya? (misal: selokan mampet)"></textarea><br><br>
 
-    $reply = "halo";
+            <button id="btnKirim">Kirim Laporan</button>
+        </div>
 
-    // Kirim balasan ke Fonnte API
-    $curl = curl_init();
+        <hr>
 
-    curl_setopt_array($curl, array(
-        CURLOPT_URL => "https://api.fonnte.com/send",
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_POST => true,
-        CURLOPT_POSTFIELDS => array(
-            'target' => $sender,
-            'message' => $reply,
-        ),
-        CURLOPT_HTTPHEADER => array(
-            "Authorization: $token"
-        ),
-    ));
-
-    $response = curl_exec($curl);
-    curl_close($curl);
-}
-
-// Optional: biar gak timeout
-http_response_code(200);
-echo "OK";
-?>
+        <h3>Daftar Laporan Warga:</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nama</th>
+                    <th>Laporan</th>
+                    <th>Status</th>
+                    <th>Waktu</th>
+                    <th>Aksi (Khusus RT)</th>
+                </tr>
+            </thead>
+            <tbody id="tabelLaporan">
+                </tbody>
+        </table>
+    </div>
+    <script src="index.js"></script>
+</body>
+</html>

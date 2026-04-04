@@ -1,0 +1,54 @@
+body {
+    font-family: "Times New Roman", Times, serif;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 10px;
+}
+
+.container {
+    width: 100%;
+}
+
+h1 {
+    text-decoration: underline;
+}
+
+table {
+    width: 100%;
+    border: 1px solid black;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th, td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: left;
+}
+
+th {
+    background-color: #cccccc;
+    font-weight: bold;
+}
+
+button {
+    background-color: #e0e0e0;
+    color: black;
+    border: 2px outset #ffffff;
+    padding: 3px 10px;
+    cursor: pointer;
+    font-family: "Times New Roman", Times, serif;
+}
+
+button:active {
+    border: 2px inset #ffffff;
+}
+
+.btn-selesai {
+    color: green;
+    font-weight: bold;
+}
+
+.btn-hapus {
+    color: red;
+}
